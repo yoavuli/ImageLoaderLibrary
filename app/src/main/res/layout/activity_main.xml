@@ -4,17 +4,43 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    android:layout_height="wrap_content"
+    tools:context=".MainActivity"
+    android:paddingBottom="20dp"
+    android:background="@color/white"
+    >
 
-    <TextView
-        android:id="@+id/title"
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/invalidateButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:text="@string/invalidate_cache_title"
+        android:textSize="16sp"
+        android:paddingHorizontal="20dp"
+        android:paddingVertical="10dp"
+        android:textColor="@color/white"
+        app:cornerRadius="50dp"
+        android:backgroundTint="@color/purple"
+        android:elevation="6dp"
+        app:rippleColor="@color/teal"
+        app:strokeColor="@color/white"
+        app:strokeWidth="2dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="10dp"/>
+
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/imagesRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/invalidateButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="8dp"
+        android:paddingBottom="40dp"
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

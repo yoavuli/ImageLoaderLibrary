@@ -1,20 +1,45 @@
 package com.yoavuli.imageloaderapp
 
 import android.os.Bundle
-import android.util.Log
 import android.widget.TextView
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import com.yoavuli.imageloader.ImageLoader
+import androidx.activity.viewModels
+import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.yoavuli.imageloaderapp.adapters.ImageItemAdapter
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
+
+    private val viewModel: MainScreenViewModel by viewModels()
+    private val imageItemAdapter = ImageItemAdapter()
+    private val recyclerview : RecyclerView by lazy { findViewById(R.id.imagesRecyclerView) }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
+
         setContentView(R.layout.activity_main)
-        findViewById<TextView>(R.id.title).text = ImageLoader().greet()
-        Log.w("yoavImageLoader",ImageLoader().greet())
+        recyclerview.apply {
+            layoutManager = LinearLayoutManager(context).apply {
+                isSmoothScrollbarEnabled = true
+            }
+
+            adapter = imageItemAdapter
+        }
+        lifecycleScope.launch {
+            viewModel.images.collectLatest { images ->
+                imageItemAdapter.updateList(images)
+
+            }
+        }
+        findViewById<TextView>(R.id.invalidateButton)?.setOnClickListener {
+            viewModel.invalidateCache()
+            imageItemAdapter.notifyDataSetChanged()
+        }
+        viewModel.loadImages()
+
+
     }
 }
