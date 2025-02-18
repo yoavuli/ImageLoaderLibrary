@@ -5,6 +5,9 @@ import android.graphics.BitmapFactory
 import java.net.HttpURLConnection
 import java.net.URL
 
+/**
+ * Responsible for downloading images from a given URL
+ */
 class ImageDownloader {
     fun download(url: String) : Bitmap? {
 

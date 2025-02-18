@@ -12,7 +12,11 @@ import kotlinx.coroutines.sync.withPermit
 import kotlinx.coroutines.withContext
 import java.io.File
 
+/**
+ * Responsible for fetching image from available resources (local cache/ network
+ */
 object ImageLoaderFactory {
+
 
 
     private val imageDownloader : ImageDownloader = ImageDownloader()
@@ -22,7 +26,11 @@ object ImageLoaderFactory {
     private val semaphore = Semaphore(5)
     private var isInit = false
 
-
+    /**
+     *  initialize image loader with context
+     *  @param context application context
+     *  @param expirationCache expiration time for cache in milliseconds
+     */
     fun init(context: Context, expirationCache : Long = 4 * 60 * 60 * 1000){
         val maxMemory = (Runtime.getRuntime().maxMemory() / 1024).toInt()
         val cacheSize = maxMemory / 8
@@ -33,14 +41,21 @@ object ImageLoaderFactory {
 
     }
 
+    /**
+     * return image request with url
+     * @param url image url
+     * */
 
+    //
     fun load(url: String) : ImageRequest {
         return ImageRequest(url,this)
     }
 
 
-
-
+    /**
+     * execute image request and return bitmap if available
+     * @param request image request
+     */
     internal suspend fun execute(request: ImageRequest) : Bitmap? {
         return semaphore.withPermit {
             withContext(Dispatchers.IO) {
@@ -71,7 +86,9 @@ object ImageLoaderFactory {
 
     }
 
-
+    /**
+     *  download image from url and return bitmap if available. Otherwise return null
+     */
     private suspend fun downloadImage(url: String) : Bitmap? {
         return withContext(Dispatchers.IO) {
             val bitmap = imageDownloader.download(url)
@@ -82,6 +99,9 @@ object ImageLoaderFactory {
         }
     }
 
+    /**
+     * clear all  local cache
+     */
     fun invalidateCache() {
         memoryCache?.clear()
         discCache?.clear()

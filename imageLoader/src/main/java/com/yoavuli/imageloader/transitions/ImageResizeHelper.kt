@@ -4,6 +4,10 @@ import android.graphics.Bitmap
 import com.yoavuli.imageloader.RequestSettings
 import kotlin.math.min
 
+
+/**
+ * An helper class for resizing images
+ */
 class ImageResizeHelper {
 
 

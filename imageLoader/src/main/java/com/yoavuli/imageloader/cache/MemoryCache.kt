@@ -3,6 +3,10 @@ package com.yoavuli.imageloader.cache
 import android.graphics.Bitmap
 import android.util.LruCache
 
+/**
+ * A simple in-memory cache for storing and retrieving Bitmaps.
+ * @param cacheSize The maximum size of the cache in kilobytes.
+ */
 class MemoryCache(private val cacheSize: Int) {
 
     private val cache: LruCache<String, Bitmap> = object : LruCache<String, Bitmap>(cacheSize) {

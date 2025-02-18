@@ -6,6 +6,12 @@ import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 
+/**
+ * Responsible for caching images in a local directory.
+ * @param cacheDir The directory where the cached images will be stored.
+ * @param expirationCache The maximum age of cached images in milliseconds.
+ * @param maxSizeMB The maximum size of the cache in megabytes.
+ */
 class DiscCache(private val cacheDir: File,private val expirationCache: Long = 4 *60 * 60 * 1000 ,
                 maxSizeMB: Long = 100 ) {
 
@@ -48,6 +54,9 @@ class DiscCache(private val cacheDir: File,private val expirationCache: Long = 4
         return BitmapFactory.decodeFile(file.absolutePath)
     }
 
+    /**
+     * Checks the size of the cache directory and deletes files if the total size exceeds the limit.
+     */
     private fun checkSizeLimit() {
         val files = cacheDir.listFiles() ?: return
         var totalSize = files.sumOf { it.length() }
@@ -61,6 +70,9 @@ class DiscCache(private val cacheDir: File,private val expirationCache: Long = 4
         }
     }
 
+    /**
+     * Clears the cache directory.
+     */
     fun clear(){
         cacheDir.listFiles()?.forEach { it.delete() }
     }

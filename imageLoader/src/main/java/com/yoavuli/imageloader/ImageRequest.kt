@@ -7,6 +7,11 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
+/**
+ * holds all the image request parameters
+ * @param url image url
+ * @param factory image loader factory
+ */
 class ImageRequest ( val url : String, private val factory : ImageLoaderFactory ){
 
     private var placeholder : Int? = null
@@ -24,6 +29,7 @@ class ImageRequest ( val url : String, private val factory : ImageLoaderFactory 
     fun setView(view : View){
 
         CoroutineScope(Dispatchers.Main).launch {
+            // set placeholder before fetching image .support both imageView and view
             if (view is ImageView) view.setImageResource(placeholder ?: 0)
             else view.setBackgroundResource(placeholder ?: 0)
             val bitmap = factory.execute(this@ImageRequest)
@@ -34,6 +40,7 @@ class ImageRequest ( val url : String, private val factory : ImageLoaderFactory 
                 view.animate().alpha(1f).setDuration(300).start()
 
             } else
+                // set error placeholder if image not found. support both imageView and view
                 errorPlaceholder?.let {
                     if (view is ImageView) view.setImageResource(it)
                     else view.setBackgroundResource(it)
